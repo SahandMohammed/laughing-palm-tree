@@ -1,0 +1,22 @@
+{
+  "name": "logicbloom-motion-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-launch.mp4 --codec=h264",
+    "render:preview": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-preview.mp4 --codec=h264 --scale=0.5",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "remotion": "4.0.532",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.9.0"
+  }
+}
