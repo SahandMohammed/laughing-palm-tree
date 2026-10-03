@@ -1,0 +1,47 @@
+{
+  "compositionId": "logicbloom-prive-launch",
+  "fps": 30,
+  "narration": {
+    "path": "../audio/narration.wav",
+    "duration": 45.632,
+    "sampleRate": 24000,
+    "channels": 1,
+    "bitsPerSample": 16,
+    "timingMethod": "sentence allocation from final script over exact PCM duration; refine with HyperFrames transcription if desired"
+  },
+  "duration": 47.432,
+  "sentences": [
+    {"id":"vo01","start":0.000,"end":2.704,"text":"A great experience shouldn't end at the door."},
+    {"id":"vo02","start":2.704,"end":8.287,"text":"For Privé, we set out to build a digital experience around the same idea that defines the lounge:"},
+    {"id":"vo03","start":8.287,"end":10.110,"text":"being in the right hands."},
+    {"id":"vo04","start":10.110,"end":12.521,"text":"We started with a new digital presence."},
+    {"id":"vo05","start":12.521,"end":14.931,"text":"A website built around the Privé identity."},
+    {"id":"vo06","start":14.931,"end":17.635,"text":"A unique digital invitation experience for the opening."},
+    {"id":"vo07","start":17.635,"end":20.339,"text":"And the technology and infrastructure behind the business."},
+    {"id":"vo08","start":20.339,"end":22.266,"text":"Then, we built something deeper."},
+    {"id":"vo09","start":22.266,"end":29.076,"text":"A management system designed around the way Privé actually works — connecting operations, services, customers, and the team in one experience."},
+    {"id":"vo10","start":29.076,"end":30.607,"text":"And we're still building."},
+    {"id":"vo11","start":30.607,"end":38.591,"text":"A new mobile experience is coming next — making it easier to discover services, choose your master, book your time, and stay connected with Privé."},
+    {"id":"vo12","start":38.591,"end":41.588,"text":"From the first interaction to every visit that follows."},
+    {"id":"vo13","start":41.588,"end":43.412,"text":"Designed and built by LogicBloom."},
+    {"id":"vo14","start":43.412,"end":45.632,"text":"Digital experiences, built around the business."}
+  ],
+  "scenes": [
+    {"id":"scene01","start":0.000,"duration":2.704,"name":"Cold open"},
+    {"id":"scene02","start":2.704,"duration":5.583,"name":"Prive identity"},
+    {"id":"scene03","start":8.287,"duration":1.823,"name":"In the right hands"},
+    {"id":"scene04","start":10.110,"duration":2.411,"name":"Digital presence"},
+    {"id":"scene05","start":12.521,"duration":2.410,"name":"Real website"},
+    {"id":"scene06","start":14.931,"duration":2.704,"name":"Invitation experience"},
+    {"id":"scene07","start":17.635,"duration":2.704,"name":"Infrastructure"},
+    {"id":"scene08","start":20.339,"duration":1.927,"name":"Something deeper"},
+    {"id":"scene09","start":22.266,"duration":3.434,"name":"Management reveal"},
+    {"id":"scene10","start":25.700,"duration":3.376,"name":"System connection"},
+    {"id":"scene11","start":29.076,"duration":1.531,"name":"Still building"},
+    {"id":"scene12","start":30.607,"duration":2.893,"name":"Mobile reveal"},
+    {"id":"scene13","start":33.500,"duration":5.091,"name":"Mobile experience"},
+    {"id":"scene14","start":38.591,"duration":2.997,"name":"Experience loop"},
+    {"id":"scene15","start":41.588,"duration":1.824,"name":"LogicBloom reveal"},
+    {"id":"scene16","start":43.412,"duration":4.020,"name":"Final statement and hold"}
+  ]
+}
