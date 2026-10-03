@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1080, initial-scale=1" />
+  <title>Privé — Liquid Glass Launch V2</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --paper: #f6f7f2;
+      --paper-2: #eef1e7;
+      --ink: #11120f;
+      --muted: #74786e;
+      --olive: #4d4d35;
+      --olive-soft: #74765a;
+      --glass-a: rgba(255,255,255,.68);
+      --glass-b: rgba(255,255,255,.24);
+      --line: rgba(255,255,255,.84);
+      --shadow: rgba(42,46,33,.14);
+      --display: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #dfe2d8;
+      font-family: var(--display);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    body { display: grid; place-items: center; }
+
+    #stage {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 18% 11%, rgba(255,255,255,.98), rgba(255,255,255,0) 31%),
+        radial-gradient(circle at 86% 23%, rgba(223,228,208,.95), rgba(223,228,208,0) 34%),
+        linear-gradient(155deg, #fbfcf8 0%, var(--paper) 48%, #edf0e5 100%);
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      color: var(--ink);
+    }
+
+    .scene-content {
+      position: absolute;
+      inset: 0;
+      padding: 86px 72px;
+      z-index: 5;
+    }
+
+    .global-orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(9px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #orb1 {
+      width: 760px;
+      height: 760px;
+      left: -260px;
+      top: 180px;
+      background: radial-gradient(circle at 62% 38%, rgba(255,255,255,.98), rgba(218,225,201,.78) 48%, rgba(77,77,53,.04) 78%);
+    }
+
+    #orb2 {
+      width: 610px;
+      height: 610px;
+      right: -190px;
+      top: 760px;
+      background: radial-gradient(circle at 40% 30%, rgba(255,255,255,.96), rgba(235,238,226,.82) 42%, rgba(77,77,53,.08) 78%);
+    }
+
+    #orb3 {
+      width: 520px;
+      height: 520px;
+      left: 360px;
+      bottom: -170px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.95), rgba(218,223,204,.72) 51%, rgba(77,77,53,.05) 79%);
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: .03;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      pointer-events: none;
+      box-shadow: inset 0 0 180px rgba(78,82,66,.06);
+    }
+
+    .glass {
+      position: relative;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(255,255,255,.94), rgba(255,255,255,.32) 35%, rgba(255,255,255,.12) 68%),
+        linear-gradient(145deg, var(--glass-a), var(--glass-b));
+      border: 1px solid var(--line);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.96),
+        inset 0 -1px 0 rgba(255,255,255,.22),
+        0 32px 85px var(--shadow),
+        0 8px 28px rgba(38,42,31,.07);
+      backdrop-filter: blur(34px) saturate(175%);
+      -webkit-backdrop-filter: blur(34px) saturate(175%);
+    }
+
+    .glass::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      background:
+        linear-gradient(125deg, rgba(255,255,255,.86), rgba(255,255,255,0) 22%, rgba(255,255,255,.10) 67%, rgba(255,255,255,.54));
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .distort { filter: url(#liquid-distort); }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: .28em;
+      font-weight: 820;
+    }
+
+    .counter {
+      min-width: 88px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      font-size: 16px;
+      letter-spacing: .14em;
+      font-weight: 800;
+      color: #666a5e;
+    }
+
+    .kicker {
+      font-size: 21px;
+      line-height: 1.15;
+      letter-spacing: .27em;
+      text-transform: uppercase;
+      font-weight: 780;
+      color: var(--olive);
+    }
+
+    .display-xl {
+      margin: 0;
+      font-size: 158px;
+      line-height: .86;
+      letter-spacing: -.075em;
+      font-weight: 840;
+      text-transform: uppercase;
+    }
+
+    .display-lg {
+      margin: 0;
+      font-size: 116px;
+      line-height: .9;
+      letter-spacing: -.064em;
+      font-weight: 820;
+      text-transform: uppercase;
+    }
+
+    .body {
+      margin: 0;
+      font-size: 29px;
+      line-height: 1.38;
+      letter-spacing: -.025em;
+      color: var(--muted);
+    }
+
+    .soft-rule {
+      width: 160px;
+      height: 2px;
+      background: var(--olive);
+      transform-origin: left center;
+    }
+
+    #transitionLayer {
+      position: absolute;
+      inset: 0;
+      z-index: 35;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #flash {
+      position: absolute;
+      inset: -5%;
+      background: rgba(255,255,255,.98);
+      opacity: 0;
+    }
+
+    #whip {
+      position: absolute;
+      width: 1700px;
+      height: 320px;
+      left: -1900px;
+      top: 660px;
+      transform: rotate(-11deg);
+      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.94), rgba(232,236,220,.66), rgba(255,255,255,0));
+      filter: blur(34px);
+      opacity: 0;
+    }
+
+    #s1 .scene-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .s1-copy {
+      margin-top: 315px;
+      position: relative;
+      z-index: 8;
+    }
+
+    .line-mask {
+      overflow: hidden;
+      padding: 5px 0 16px;
+    }
+
+    .line-mask > * { display: block; }
+
+    .s1-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 44px;
+      position: relative;
+      z-index: 8;
+    }
+
+    .s1-bottom .body { max-width: 690px; }
+
+    #heroLens {
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      right: -170px;
+      top: 400px;
+      border-radius: 46% 54% 59% 41% / 42% 49% 51% 58%;
+      z-index: 3;
+      transform: rotate(-12deg);
+    }
+
+    #heroLens::after {
+      content: "";
+      position: absolute;
+      inset: 78px 70px 106px 56px;
+      border-radius: 48%;
+      border: 2px solid rgba(255,255,255,.80);
+      box-shadow: inset 0 0 54px rgba(255,255,255,.42);
+    }
+
+    #s2 .scene-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .statement {
+      position: relative;
+      z-index: 8;
+    }
+
+    .statement-line {
+      overflow: hidden;
+      padding: 3px 0 18px;
+    }
+
+    .statement-line:nth-child(2) { margin-left: 86px; }
+    .statement-line:nth-child(3) { margin-left: 20px; }
+
+    #liquidSheet {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      top: 650px;
+      height: 690px;
+      border-radius: 52% 48% 58% 42% / 41% 57% 43% 59%;
+      z-index: 2;
+      transform: rotate(4deg);
+    }
+
+    .statement-foot {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-top: 42px;
+      color: var(--olive);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+
+    #s3 .scene-content { padding-top: 78px; }
+
+    .product-copy {
+      margin-top: 112px;
+      position: relative;
+      z-index: 12;
+    }
+
+    .device-stage {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 520px;
+      height: 1280px;
+      perspective: 1800px;
+      z-index: 7;
+    }
+
+    #phone {
+      position: absolute;
+      left: 210px;
+      top: 28px;
+      width: 660px;
+      height: 1110px;
+      border-radius: 90px;
+      padding: 22px;
+      transform-style: preserve-3d;
+    }
+
+    .phone-bezel {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(255,255,255,.86), rgba(216,221,208,.42));
+      border: 1px solid rgba(255,255,255,.90);
+      box-shadow:
+        0 82px 160px rgba(49,53,39,.20),
+        0 20px 55px rgba(49,53,39,.12),
+        inset 0 1px 0 rgba(255,255,255,.96);
+    }
+
+    .screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 67px;
+      background:
+        radial-gradient(circle at 86% 14%, rgba(224,229,211,.92), transparent 30%),
+        linear-gradient(160deg, rgba(255,255,255,.98), rgba(239,242,234,.96));
+      border: 1px solid rgba(255,255,255,.92);
+      padding: 52px 40px 38px;
+    }
+
+    .island {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 172px;
+      height: 48px;
+      transform: translateX(-50%);
+      border-radius: 99px;
+      background: #151612;
+    }
+
+    .app-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+    }
+
+    .app-logo {
+      font-size: 22px;
+      letter-spacing: .24em;
+      font-weight: 850;
+    }
+
+    .profile {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #62664d, #d8dcc9);
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,.76);
+    }
+
+    .hello {
+      margin-top: 68px;
+      font-size: 60px;
+      line-height: .96;
+      letter-spacing: -.055em;
+      font-weight: 810;
+    }
+
+    .app-sub {
+      margin-top: 13px;
+      color: #767a70;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    .booking-card {
+      margin-top: 48px;
+      min-height: 306px;
+      border-radius: 42px;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .booking-card .label,
+    .masters-label {
+      font-size: 15px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #71766a;
+      font-weight: 800;
+    }
+
+    .booking-card h3 {
+      margin: 40px 0 9px;
+      font-size: 41px;
+      line-height: .96;
+      letter-spacing: -.04em;
+    }
+
+    .booking-card p {
+      margin: 0;
+      color: #75796e;
+      font-size: 19px;
+    }
+
+    .slot {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      padding: 15px 18px;
+      border-radius: 999px;
+      background: var(--olive);
+      color: white;
+      font-size: 17px;
+      font-weight: 820;
+    }
+
+    .masters-label { margin-top: 40px; }
+
+    .master-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .master {
+      flex: 1;
+      height: 92px;
+      border-radius: 26px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.66);
+      border: 1px solid rgba(77,77,53,.12);
+    }
+
+    .master-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #62664d, #d9ddcc);
+    }
+
+    .master span {
+      font-size: 14px;
+      font-weight: 750;
+      color: #65695d;
+    }
+
+    .float-card {
+      position: absolute;
+      z-index: 14;
+      border-radius: 999px;
+      padding: 20px 27px;
+      font-size: 18px;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    #float1 { left: 44px; top: 280px; }
+    #float2 { right: 40px; top: 470px; }
+    #float3 { left: 74px; top: 790px; }
+
+    .halo {
+      position: absolute;
+      width: 780px;
+      height: 780px;
+      left: 146px;
+      top: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.74), rgba(255,255,255,0) 68%);
+      filter: blur(14px);
+      opacity: .78;
+    }
+
+    #s4 .scene-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .verb-wrap {
+      position: relative;
+      z-index: 8;
+    }
+
+    .verb-line {
+      overflow: hidden;
+      padding-bottom: 23px;
+    }
+
+    .verb-line span {
+      display: block;
+      font-size: 156px;
+      line-height: .86;
+      letter-spacing: -.072em;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .verb-line:nth-child(2) span { margin-left: 110px; }
+    .verb-line:nth-child(3) span { margin-left: 28px; }
+
+    #glassRibbon {
+      position: absolute;
+      left: -210px;
+      top: 760px;
+      width: 1500px;
+      height: 300px;
+      border-radius: 180px;
+      z-index: 4;
+      transform: rotate(-8deg);
+    }
+
+    #glassRibbon .spec {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -430px;
+      width: 370px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.94), transparent);
+      filter: blur(18px);
+      transform: skewX(-20deg);
+    }
+
+    #s5 .scene-content { padding-top: 78px; }
+
+    .ecosystem-copy {
+      margin-top: 104px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .ecosystem-stage {
+      position: absolute;
+      left: 54px;
+      right: 54px;
+      top: 670px;
+      height: 1030px;
+      perspective: 1700px;
+      z-index: 7;
+    }
+
+    #browser {
+      position: absolute;
+      left: 50px;
+      top: 50px;
+      width: 870px;
+      height: 580px;
+      border-radius: 42px;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .browser-bar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 22px;
+      border-bottom: 1px solid rgba(77,77,53,.10);
+    }
+
+    .browser-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(77,77,53,.25);
+    }
+
+    .browser-url {
+      margin-left: 12px;
+      font-size: 13px;
+      color: #767a6e;
+      letter-spacing: .04em;
+    }
+
+    .web-body {
+      position: absolute;
+      inset: 64px 0 0;
+      padding: 44px 42px;
+      background:
+        radial-gradient(circle at 82% 14%, rgba(219,225,204,.75), transparent 28%),
+        linear-gradient(145deg, rgba(255,255,255,.91), rgba(242,244,237,.83));
+    }
+
+    .web-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 750;
+      color: #676b5f;
+    }
+
+    .web-hero {
+      margin-top: 94px;
+      font-size: 56px;
+      line-height: .9;
+      letter-spacing: -.055em;
+      font-weight: 830;
+      text-transform: uppercase;
+      max-width: 590px;
+    }
+
+    .web-cta {
+      margin-top: 27px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px;
+      border-radius: 999px;
+      background: var(--olive);
+      color: white;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .site-card {
+      position: absolute;
+      border-radius: 34px;
+      padding: 25px;
+      width: 360px;
+      min-height: 210px;
+      z-index: 9;
+    }
+
+    #siteCard1 { left: 50px; top: 680px; }
+    #siteCard2 { right: 50px; top: 735px; }
+
+    .site-card .eyebrow {
+      font-size: 14px;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      color: #757a6f;
+      font-weight: 800;
+    }
+
+    .site-card strong {
+      display: block;
+      margin-top: 48px;
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    .site-card small {
+      display: block;
+      margin-top: 10px;
+      color: #777b70;
+      font-size: 15px;
+    }
+
+    #s6 .scene-content {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 80px;
+    }
+
+    #finalOrb {
+      position: absolute;
+      width: 760px;
+      height: 760px;
+      left: 160px;
+      top: 520px;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .final-lockup {
+      position: relative;
+      z-index: 10;
+    }
+
+    .final-brand {
+      font-size: 112px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: .20em;
+      margin-left: .20em;
+    }
+
+    .final-tag {
+      margin-top: 31px;
+      font-size: 28px;
+      color: #6f7368;
+      letter-spacing: -.02em;
+    }
+
+    .final-pill {
+      display: inline-flex;
+      margin-top: 66px;
+      padding: 20px 28px;
+      border-radius: 999px;
+      font-size: 16px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      font-weight: 820;
+      color: #5f6357;
+    }
+
+    .final-site {
+      position: absolute;
+      bottom: 88px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 10;
+      font-size: 17px;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      color: #6f7468;
+    }
+
+    .micro {
+      position: absolute;
+      left: 72px;
+      bottom: 88px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(80,84,72,.52);
+      z-index: 8;
+    }
+  </style>
+</head>
+<body>
+  <main
+    id="stage"
+    data-composition-id="prive-launch-v2"
+    data-start="0"
+    data-duration="12"
+    data-width="1080"
+    data-height="1920"
+    data-fps="30"
+  >
+    <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+      <filter id="liquid-distort" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.010 0.015" numOctaves="2" seed="17" result="noise"/>
+        <feGaussianBlur in="noise" stdDeviation="2.4" result="softNoise"/>
+        <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
+
+    <div id="orb1" class="global-orb"></div>
+    <div id="orb2" class="global-orb"></div>
+    <div id="orb3" class="global-orb"></div>
+
+    <section id="s1" class="scene clip" data-start="0" data-duration="1.8" data-track-index="0">
+      <div class="scene-content">
+        <div class="topbar">
+          <div class="brand">PRIVÉ</div>
+          <div class="counter glass">01 / 06</div>
+        </div>
+
+        <div id="heroLens" class="glass distort"></div>
+
+        <div class="s1-copy">
+          <div class="kicker" id="s1Kicker">A new digital experience</div>
+          <div class="line-mask"><h1 class="display-xl" id="s1a">MORE THAN</h1></div>
+          <div class="line-mask"><h1 class="display-xl" id="s1b">GROOMING.</h1></div>
+        </div>
+
+        <div class="s1-bottom">
+          <div>
+            <div class="soft-rule" id="s1Rule"></div>
+            <div class="kicker" style="margin-top:14px">Privé</div>
+          </div>
+          <p class="body" id="s1Body">A considered digital layer for the same experience you expect inside the lounge.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s2" class="scene clip" data-start="1.8" data-duration="1.9" data-track-index="0">
+      <div id="liquidSheet" class="glass distort"></div>
+      <div class="scene-content">
+        <div class="topbar">
+          <div class="brand">PRIVÉ</div>
+          <div class="counter glass">02 / 06</div>
+        </div>
+
+        <div class="statement">
+          <div class="statement-line"><span class="display-lg" id="s2a">IN THE</span></div>
+          <div class="statement-line"><span class="display-lg" id="s2b">RIGHT</span></div>
+          <div class="statement-line"><span class="display-lg" id="s2c">HANDS.</span></div>
+          <div class="statement-foot" id="s2Foot">
+            <div class="soft-rule"></div>
+            <span>Now beyond the lounge</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" class="scene clip" data-start="3.7" data-duration="2.7" data-track-index="0">
+      <div class="scene-content">
+        <div class="topbar">
+          <div class="brand">PRIVÉ</div>
+          <div class="counter glass">03 / 06</div>
+        </div>
+
+        <div class="product-copy">
+          <div class="kicker" id="s3Kicker">Introducing</div>
+          <h2 class="display-lg" id="s3Title">THE PRIVÉ<br/>EXPERIENCE.</h2>
+        </div>
+      </div>
+
+      <div class="device-stage">
+        <div class="halo" id="deviceHalo"></div>
+        <div id="float1" class="float-card glass">Book in seconds</div>
+        <div id="float2" class="float-card glass">Your time. Your choice.</div>
+        <div id="float3" class="float-card glass">Built around you</div>
+
+        <div id="phone">
+          <div class="phone-bezel glass"></div>
+          <div class="screen">
+            <div class="island"></div>
+            <div class="app-top">
+              <div class="app-logo">PRIVÉ</div>
+              <div class="profile"></div>
+            </div>
+            <div class="hello">Good evening.</div>
+            <div class="app-sub">Your next appointment, beautifully simple.</div>
+            <div class="booking-card glass">
+              <div class="label">Upcoming appointment</div>
+              <h3>Signature haircut</h3>
+              <p>Your preferred master</p>
+              <div class="slot">7:30 PM</div>
+            </div>
+            <div class="masters-label">Choose your experience</div>
+            <div class="master-row">
+              <div class="master"><div class="master-dot"></div><span>Hair</span></div>
+              <div class="master"><div class="master-dot"></div><span>Skin</span></div>
+              <div class="master"><div class="master-dot"></div><span>Care</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4" class="scene clip" data-start="6.4" data-duration="1.6" data-track-index="0">
+      <div id="glassRibbon" class="glass distort"><div class="spec" id="ribbonSpec"></div></div>
+      <div class="scene-content">
+        <div class="topbar">
+          <div class="brand">PRIVÉ</div>
+          <div class="counter glass">04 / 06</div>
+        </div>
+        <div class="verb-wrap">
+          <div class="verb-line"><span id="v1">BOOK.</span></div>
+          <div class="verb-line"><span id="v2">GROOM.</span></div>
+          <div class="verb-line"><span id="v3">RETURN.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5" class="scene clip" data-start="8.0" data-duration="2.2" data-track-index="0">
+      <div class="scene-content">
+        <div class="topbar">
+          <div class="brand">PRIVÉ</div>
+          <div class="counter glass">05 / 06</div>
+        </div>
+        <div class="ecosystem-copy">
+          <div class="kicker" id="s5Kicker">The next chapter</div>
+          <h2 class="display-lg" id="s5Title">DIGITAL,<br/>DONE RIGHT.</h2>
+        </div>
+      </div>
+
+      <div class="ecosystem-stage">
+        <div id="browser" class="glass">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-url">privelounge.co</div>
+          </div>
+          <div class="web-body">
+            <div class="web-nav">
+              <span>PRIVÉ</span>
+              <span>Services&nbsp;&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;Visit</span>
+            </div>
+            <div class="web-hero">IN THE<br/>RIGHT HANDS.</div>
+            <div class="web-cta">Explore Privé <span>→</span></div>
+          </div>
+        </div>
+
+        <article id="siteCard1" class="site-card glass">
+          <div class="eyebrow">01 / Booking</div>
+          <strong>Your visit,<br/>on your time.</strong>
+          <small>Simple, direct, considered.</small>
+        </article>
+
+        <article id="siteCard2" class="site-card glass">
+          <div class="eyebrow">02 / Mobile</div>
+          <strong>Everything<br/>in one place.</strong>
+          <small>Coming soon.</small>
+        </article>
+      </div>
+    </section>
+
+    <section id="s6" class="scene clip" data-start="10.2" data-duration="1.8" data-track-index="0">
+      <div id="finalOrb" class="glass distort"></div>
+      <div class="scene-content">
+        <div class="final-lockup">
+          <div class="kicker" id="finalKicker">Privé Grooming Lounge</div>
+          <div class="final-brand" id="finalBrand">PRIVÉ</div>
+          <div class="final-tag" id="finalTag">in the right hands.</div>
+          <div class="final-pill glass" id="finalPill">The experience continues</div>
+        </div>
+      </div>
+      <div class="final-site" id="finalSite">privelounge.co</div>
+    </section>
+
+    <div id="transitionLayer">
+      <div id="flash"></div>
+      <div id="whip"></div>
+    </div>
+
+    <div class="micro">LogicBloom × Privé</div>
+    <div class="grain"></div>
+    <div class="vignette"></div>
+  </main>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: { ease: "power4.out" }
+    });
+
+    tl.fromTo("#orb1", { x: -20, y: 0, scale: .96 }, { x: 120, y: 210, scale: 1.12, duration: 12, ease: "none" }, 0);
+    tl.fromTo("#orb2", { x: 10, y: 0, scale: 1 }, { x: -150, y: -180, scale: 1.18, duration: 12, ease: "none" }, 0);
+    tl.fromTo("#orb3", { x: 0, y: 0, scale: 1 }, { x: -95, y: -120, scale: 1.24, duration: 12, ease: "none" }, 0);
+
+    tl.from("#s1Kicker", { y: 24, autoAlpha: 0, duration: .35 }, .10);
+    tl.from("#s1a", { yPercent: 118, duration: .52 }, .16);
+    tl.from("#s1b", { yPercent: 118, duration: .57 }, .24);
+    tl.from("#s1Rule", { scaleX: 0, duration: .42, ease: "expo.out" }, .43);
+    tl.from("#s1Body", { y: 24, autoAlpha: 0, duration: .40 }, .48);
+    tl.from("#heroLens", { x: 210, scale: .62, rotate: -22, autoAlpha: 0, duration: .74, ease: "expo.out" }, .18);
+    tl.to("#heroLens", { x: -60, y: 90, rotate: 8, duration: 1.18, ease: "sine.inOut" }, .58);
+
+    tl.fromTo("#flash", { autoAlpha: 0 }, { autoAlpha: .96, duration: .08, ease: "power2.in" }, 1.72);
+    tl.to("#flash", { autoAlpha: 0, duration: .12, ease: "power2.out" }, 1.80);
+
+    tl.from("#liquidSheet", { scale: .74, rotate: -8, autoAlpha: 0, duration: .66, ease: "expo.out" }, 1.84);
+    tl.from("#s2a", { yPercent: 118, duration: .44 }, 1.91);
+    tl.from("#s2b", { yPercent: 118, duration: .46 }, 2.01);
+    tl.from("#s2c", { yPercent: 118, duration: .49 }, 2.11);
+    tl.from("#s2Foot", { x: -34, autoAlpha: 0, duration: .37 }, 2.35);
+    tl.to("#liquidSheet", { y: 60, rotate: -4, borderRadius: "59% 41% 63% 37% / 47% 58% 42% 53%", duration: 1.05, ease: "sine.inOut" }, 2.52);
+
+    tl.set("#whip", { x: 0, autoAlpha: 0 }, 3.48);
+    tl.to("#whip", { x: 2050, autoAlpha: .90, duration: .24, ease: "expo.in" }, 3.50);
+    tl.to("#whip", { autoAlpha: 0, duration: .06 }, 3.68);
+
+    tl.from("#s3Kicker", { y: 22, autoAlpha: 0, duration: .30 }, 3.78);
+    tl.from("#s3Title", { y: 46, autoAlpha: 0, duration: .48 }, 3.84);
+    tl.from("#deviceHalo", { scale: .62, autoAlpha: 0, duration: .82, ease: "expo.out" }, 3.88);
+    tl.from("#phone", { y: 330, rotateX: 13, rotateY: -18, rotateZ: -5, scale: .82, autoAlpha: 0, duration: .88, ease: "expo.out" }, 3.98);
+    tl.from("#float1", { x: -70, scale: .72, autoAlpha: 0, duration: .38 }, 4.43);
+    tl.from("#float2", { x: 70, scale: .72, autoAlpha: 0, duration: .38 }, 4.56);
+    tl.from("#float3", { x: -60, scale: .72, autoAlpha: 0, duration: .38 }, 4.69);
+    tl.to("#phone", { y: -42, rotateY: 2.6, scale: 1.015, duration: 1.26, ease: "sine.inOut" }, 4.78);
+    tl.to("#float1", { y: -28, x: -8, duration: 1.0, ease: "sine.inOut" }, 4.86);
+    tl.to("#float2", { y: 22, x: 8, duration: 1.0, ease: "sine.inOut" }, 4.86);
+    tl.to("#float3", { y: -18, x: -6, duration: 1.0, ease: "sine.inOut" }, 4.86);
+    tl.to("#deviceHalo", { scale: 1.08, autoAlpha: .95, duration: 1.18, ease: "sine.inOut" }, 4.92);
+
+    tl.fromTo("#flash", { autoAlpha: 0 }, { autoAlpha: .98, duration: .07 }, 6.31);
+    tl.to("#flash", { autoAlpha: 0, duration: .10 }, 6.39);
+
+    tl.from("#glassRibbon", { x: -340, rotate: -15, autoAlpha: 0, duration: .58, ease: "expo.out" }, 6.43);
+    tl.from("#v1", { yPercent: 120, rotate: 2, duration: .40 }, 6.47);
+    tl.from("#v2", { yPercent: 120, rotate: 2, duration: .42 }, 6.59);
+    tl.from("#v3", { yPercent: 120, rotate: 2, duration: .44 }, 6.71);
+    tl.fromTo("#ribbonSpec", { x: 0 }, { x: 1900, duration: .76, ease: "power2.inOut" }, 6.87);
+    tl.to("#glassRibbon", { y: -68, rotate: -2, duration: .78, ease: "sine.inOut" }, 7.08);
+    tl.to(".verb-wrap", { scale: 1.015, duration: .60, ease: "none" }, 7.15);
+
+    tl.fromTo("#flash", { autoAlpha: 0 }, { autoAlpha: .84, duration: .08 }, 7.91);
+    tl.to("#flash", { autoAlpha: 0, duration: .12 }, 7.99);
+
+    tl.from("#s5Kicker", { y: 22, autoAlpha: 0, duration: .30 }, 8.08);
+    tl.from("#s5Title", { y: 42, autoAlpha: 0, duration: .46 }, 8.14);
+    tl.from("#browser", { y: 110, rotateX: 7, rotateY: -5, scale: .92, autoAlpha: 0, duration: .68, ease: "expo.out" }, 8.34);
+    tl.from("#siteCard1", { x: -78, y: 46, scale: .88, autoAlpha: 0, duration: .46 }, 8.72);
+    tl.from("#siteCard2", { x: 78, y: 64, scale: .88, autoAlpha: 0, duration: .46 }, 8.84);
+    tl.to("#browser", { y: -24, rotateY: 1.8, scale: 1.015, duration: 1.10, ease: "sine.inOut" }, 8.90);
+    tl.to("#siteCard1", { y: -18, rotate: -.8, duration: .95, ease: "sine.inOut" }, 9.06);
+    tl.to("#siteCard2", { y: 16, rotate: .8, duration: .95, ease: "sine.inOut" }, 9.06);
+
+    tl.fromTo("#flash", { autoAlpha: 0 }, { autoAlpha: .98, duration: .10 }, 10.10);
+    tl.to("#flash", { autoAlpha: 0, duration: .12 }, 10.20);
+
+    tl.from("#finalOrb", { scale: .62, rotate: -12, autoAlpha: 0, duration: .72, ease: "expo.out" }, 10.22);
+    tl.from("#finalKicker", { y: 20, autoAlpha: 0, duration: .30 }, 10.30);
+    tl.from("#finalBrand", { y: 34, autoAlpha: 0, letterSpacing: ".28em", duration: .52, ease: "expo.out" }, 10.40);
+    tl.from("#finalTag", { y: 20, autoAlpha: 0, duration: .34 }, 10.68);
+    tl.from("#finalPill", { y: 22, scale: .92, autoAlpha: 0, duration: .36 }, 10.88);
+    tl.from("#finalSite", { y: 18, autoAlpha: 0, duration: .30 }, 11.06);
+    tl.to("#finalOrb", { scale: 1.07, rotate: 8, y: -18, duration: 1.12, ease: "sine.inOut" }, 10.74);
+    tl.to("#finalBrand", { y: -8, duration: .82, ease: "sine.inOut" }, 11.04);
+
+    window.__timelines["prive-launch-v2"] = tl;
+  </script>
+</body>
+</html>
