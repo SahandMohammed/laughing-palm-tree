@@ -3,7 +3,9 @@ import {
   AbsoluteFill,
   Easing,
   Img,
+  Img,
   Sequence,
+  staticFile,
   interpolate,
   spring,
   useCurrentFrame,
@@ -49,122 +51,31 @@ const fadeWindow = (
   return fadeIn * fadeOut;
 };
 
-const petalAngles = Array.from({length: 8}, (_, i) => i * 45);
-
-const LogicBloomMark: React.FC<{size?: number; progress?: number}> = ({
-  size = 220,
-  progress = 1,
-}) => {
-  const stroke = 7;
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 300 300"
-      style={{
-        overflow: 'visible',
-        opacity: progress,
-        transform: `scale(${0.94 + progress * 0.06})`,
-      }}
-    >
-      <g
-        fill="none"
-        stroke={NAVY}
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {petalAngles.map((angle, index) => {
-          const local = Math.max(
-            0,
-            Math.min(1, progress * 1.55 - index * 0.055),
-          );
-          return (
-            <g
-              key={angle}
-              transform={`translate(150 150) rotate(${angle})`}
-              style={{
-                opacity: local,
-                transformOrigin: '150px 150px',
-              }}
-            >
-              <ellipse
-                cx="0"
-                cy="-83"
-                rx="38"
-                ry="50"
-                pathLength="1"
-                strokeDasharray="1"
-                strokeDashoffset={1 - local}
-              />
-              <line
-                x1="0"
-                y1="-18"
-                x2="0"
-                y2="-83"
-                pathLength="1"
-                strokeDasharray="1"
-                strokeDashoffset={1 - local}
-              />
-              <circle
-                cx="0"
-                cy="-83"
-                r="5.5"
-                fill={NAVY}
-                stroke="none"
-                opacity={range(local, 0.55, 1)}
-              />
-            </g>
-          );
-        })}
-      </g>
-      <circle
-        cx="150"
-        cy="150"
-        r="30"
-        fill={NAVY}
-        opacity={range(progress, 0.25, 0.7)}
-      />
-    </svg>
-  );
-};
-
 const LogicBloomLockup: React.FC<{
   progress?: number;
   compact?: boolean;
 }> = ({progress = 1, compact = false}) => {
-  const markProgress = Math.min(1, progress * 1.25);
-  const typeProgress = range(progress, 0.35, 1);
+  const reveal = range(progress, 0.05, 1);
+  const blur = interpolate(reveal, [0, 1], [12, 0], clamp);
 
   return (
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: compact ? 26 : 42,
+        width: compact ? 650 : 860,
+        opacity: reveal,
+        clipPath: `inset(0 ${(1 - reveal) * 100}% 0 0)`,
+        transform: `translateX(${(1 - reveal) * 30}px) scale(${0.985 + reveal * 0.015})`,
+        filter: `blur(${blur}px)`,
       }}
     >
-      <LogicBloomMark
-        size={compact ? 112 : 180}
-        progress={markProgress}
-      />
-      <div
+      <Img
+        src={staticFile('logicbloom-logo.svg')}
         style={{
-          fontFamily:
-            'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-          fontSize: compact ? 58 : 86,
-          fontWeight: 500,
-          lineHeight: 1,
-          letterSpacing: compact ? -3 : -4.5,
-          color: NAVY,
-          opacity: typeProgress,
-          clipPath: `inset(0 ${(1 - typeProgress) * 100}% 0 0)`,
-          transform: `translateX(${(1 - typeProgress) * 24}px)`,
-          whiteSpace: 'nowrap',
+          display: 'block',
+          width: '100%',
+          height: 'auto',
         }}
-      >
-        LogicBloom
-      </div>
+      />
     </div>
   );
 };
