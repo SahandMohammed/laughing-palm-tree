@@ -6,7 +6,12 @@
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-launch.mp4 --codec=h264",
     "render:preview": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-preview.mp4 --codec=h264 --scale=0.5",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "hf:doctor": "npx hyperframes doctor",
+    "hf:preview": "cd hyperframes/prive-liquid-launch && npx hyperframes preview",
+    "hf:lint": "cd hyperframes/prive-liquid-launch && npx hyperframes lint",
+    "hf:check": "cd hyperframes/prive-liquid-launch && npx hyperframes check",
+    "hf:render": "cd hyperframes/prive-liquid-launch && npx hyperframes render -o renders/prive-liquid-glass-launch.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.532",
@@ -17,6 +22,7 @@
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "hyperframes": "0.8.98",
     "typescript": "^5.9.0"
   }
 }
