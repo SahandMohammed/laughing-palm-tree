@@ -3,7 +3,6 @@ import {
   AbsoluteFill,
   Easing,
   Img,
-  Img,
   Sequence,
   staticFile,
   interpolate,
