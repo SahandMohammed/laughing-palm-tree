@@ -11,7 +11,11 @@
     "hf:preview": "cd hyperframes/prive-liquid-launch && npx hyperframes preview",
     "hf:lint": "cd hyperframes/prive-liquid-launch && npx hyperframes lint",
     "hf:check": "cd hyperframes/prive-liquid-launch && npx hyperframes check",
-    "hf:render": "cd hyperframes/prive-liquid-launch && npx hyperframes render -o renders/prive-liquid-glass-launch.mp4"
+    "hf:render": "cd hyperframes/prive-liquid-launch && npx hyperframes render -o renders/prive-liquid-glass-launch.mp4",
+    "hf:v2:preview": "cd hyperframes/prive-launch-v2 && npx hyperframes preview",
+    "hf:v2:lint": "cd hyperframes/prive-launch-v2 && npx hyperframes lint",
+    "hf:v2:check": "cd hyperframes/prive-launch-v2 && npx hyperframes check",
+    "hf:v2:render": "cd hyperframes/prive-launch-v2 && npx hyperframes render -o renders/prive-launch-v2.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.532",
