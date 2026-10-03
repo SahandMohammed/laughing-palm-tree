@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-launch.mp4 --codec=h264",
-    "render:preview": "remotion render src/index.ts LogicBloomLaunch out/logicbloom-preview.mp4 --codec=h264 --scale=0.5",
+    "render": "remotion render src/index.ts LogicBloomPriveCaseStudy out/logicbloom-prive-case-study.mp4 --codec=h264",
+    "render:preview": "remotion render src/index.ts LogicBloomPriveCaseStudy out/logicbloom-prive-preview.mp4 --codec=h264 --scale=0.5",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
