@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1" />
+  <title>Privé — Liquid Glass Launch</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --ink: #11120f;
+      --muted: #6d7068;
+      --olive: #4d4d35;
+      --cream: #f7f7f2;
+      --glass: rgba(255,255,255,.36);
+      --glass-strong: rgba(255,255,255,.64);
+      --line: rgba(255,255,255,.7);
+      --shadow: rgba(25,28,20,.12);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f5f6f2;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+    }
+    body { display: grid; place-items: center; }
+    #priveLaunch {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,.98), rgba(255,255,255,0) 30%),
+        radial-gradient(circle at 83% 20%, rgba(226,229,214,.95), rgba(226,229,214,0) 32%),
+        linear-gradient(160deg, #fbfbf8 0%, #f0f2ea 48%, #fbfbf7 100%);
+    }
+    .noise {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(12px);
+      will-change: transform;
+      opacity: .95;
+    }
+    .orb-a {
+      width: 780px;
+      height: 780px;
+      left: -230px;
+      top: 280px;
+      background: radial-gradient(circle at 60% 40%, rgba(255,255,255,.94), rgba(214,221,197,.74) 46%, rgba(116,124,83,.06) 76%);
+    }
+    .orb-b {
+      width: 640px;
+      height: 640px;
+      right: -210px;
+      top: 920px;
+      background: radial-gradient(circle at 38% 35%, rgba(255,255,255,.96), rgba(232,235,223,.84) 42%, rgba(77,77,53,.12) 76%);
+    }
+    .orb-c {
+      width: 460px;
+      height: 460px;
+      left: 330px;
+      bottom: -120px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.95), rgba(219,224,204,.78) 50%, rgba(77,77,53,.08) 78%);
+    }
+    .glass {
+      background:
+        radial-gradient(circle at 18% 10%, rgba(255,255,255,.92), rgba(255,255,255,.28) 36%, rgba(255,255,255,.12) 64%),
+        linear-gradient(145deg, rgba(255,255,255,.58), rgba(255,255,255,.20));
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -1px 0 rgba(255,255,255,.24),
+        0 30px 80px rgba(49,53,39,.10),
+        0 8px 24px rgba(49,53,39,.07);
+      backdrop-filter: blur(36px) saturate(180%);
+      -webkit-backdrop-filter: blur(36px) saturate(180%);
+    }
+    .glass::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background:
+        linear-gradient(115deg, rgba(255,255,255,.78), rgba(255,255,255,0) 24%, rgba(255,255,255,.12) 70%, rgba(255,255,255,.5));
+      mix-blend-mode: soft-light;
+    }
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 92px 76px;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .scene.active-base { visibility: visible; }
+    .kicker {
+      font-size: 23px;
+      line-height: 1;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--olive);
+    }
+    .mega {
+      margin: 0;
+      font-size: 168px;
+      line-height: .86;
+      letter-spacing: -.075em;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .display {
+      margin: 0;
+      font-size: 116px;
+      line-height: .91;
+      letter-spacing: -.065em;
+      font-weight: 780;
+      text-transform: uppercase;
+    }
+    .bodycopy {
+      max-width: 770px;
+      font-size: 31px;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+      color: var(--muted);
+    }
+    .brand {
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: .28em;
+      font-weight: 800;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+    }
+    .index {
+      display: grid;
+      place-items: center;
+      min-width: 86px;
+      height: 48px;
+      padding: 0 18px;
+      border-radius: 99px;
+      font-size: 17px;
+      letter-spacing: .14em;
+      font-weight: 700;
+      color: #62665a;
+    }
+
+    /* Scene 1 */
+    #scene1 { justify-content: space-between; }
+    .hero-stack {
+      margin-top: 360px;
+      position: relative;
+      z-index: 5;
+    }
+    .hero-line { overflow: hidden; padding: 8px 0 18px; }
+    .hero-line > * { will-change: transform; }
+    .hero-sub {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-top: 56px;
+    }
+    .mini-rule { width: 180px; height: 2px; background: var(--olive); margin-bottom: 13px; }
+    .glass-lens {
+      position: absolute;
+      width: 510px;
+      height: 510px;
+      border-radius: 42% 58% 60% 40% / 48% 40% 60% 52%;
+      right: -120px;
+      top: 410px;
+      z-index: 2;
+      transform: rotate(-14deg);
+    }
+    .glass-lens::before {
+      content: "";
+      position: absolute;
+      inset: 48px 72px 88px 52px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.8);
+      filter: blur(.3px);
+      opacity: .75;
+    }
+
+    /* Scene 2 */
+    #scene2 { justify-content: center; }
+    .statement-wrap { position: relative; z-index: 8; }
+    .statement-row { overflow: hidden; padding: 4px 0 22px; }
+    .statement-row span { display: block; }
+    .statement-accent {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 34px;
+      font-size: 24px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--olive);
+      font-weight: 750;
+    }
+    .statement-accent::before {
+      content: "";
+      width: 150px;
+      height: 2px;
+      background: currentColor;
+    }
+    .morph-glass {
+      position: absolute;
+      z-index: 3;
+      width: 900px;
+      height: 520px;
+      left: 92px;
+      top: 690px;
+      border-radius: 46% 54% 44% 56% / 48% 45% 55% 52%;
+      transform: rotate(7deg);
+    }
+
+    /* Scene 3 */
+    #scene3 { padding-top: 78px; }
+    .product-title { margin-top: 130px; position: relative; z-index: 8; }
+    .product-stage {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 510px;
+      height: 1260px;
+      perspective: 1600px;
+    }
+    .phone {
+      position: absolute;
+      width: 650px;
+      height: 1090px;
+      left: 215px;
+      top: 42px;
+      border-radius: 88px;
+      padding: 22px;
+      transform-style: preserve-3d;
+      box-shadow: 0 70px 150px rgba(45,48,35,.19), 0 20px 45px rgba(45,48,35,.11);
+    }
+    .phone-shell {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 66px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(224,228,211,.92), transparent 28%),
+        linear-gradient(160deg, rgba(255,255,255,.95), rgba(241,243,236,.92));
+      border: 1px solid rgba(255,255,255,.92);
+      padding: 46px 38px;
+    }
+    .island {
+      position: absolute;
+      width: 178px;
+      height: 48px;
+      border-radius: 99px;
+      background: #181916;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: .94;
+    }
+    .app-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .app-logo { font-size: 23px; letter-spacing: .25em; font-weight: 800; }
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #62654c, #d9ddcc);
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,.7);
+    }
+    .hello {
+      margin-top: 70px;
+      font-size: 58px;
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-weight: 760;
+    }
+    .app-muted { margin-top: 13px; font-size: 20px; color: #74786d; }
+    .appointment {
+      position: relative;
+      margin-top: 50px;
+      min-height: 300px;
+      border-radius: 42px;
+      padding: 32px;
+    }
+    .appointment .small {
+      font-size: 16px;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+      color: #666b5c;
+      font-weight: 700;
+    }
+    .appointment h3 {
+      margin: 34px 0 8px;
+      font-size: 42px;
+      letter-spacing: -.04em;
+    }
+    .appointment p {
+      margin: 0;
+      font-size: 20px;
+      color: #75796e;
+    }
+    .appointment .time {
+      position: absolute;
+      right: 27px;
+      bottom: 28px;
+      padding: 15px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 18px;
+      background: #4d4d35;
+      color: white;
+    }
+    .service-label { margin-top: 48px; font-size: 18px; text-transform: uppercase; letter-spacing: .18em; color: #777b71; font-weight: 700; }
+    .service-row { display: flex; gap: 14px; margin-top: 19px; }
+    .service-pill {
+      padding: 15px 19px;
+      border-radius: 999px;
+      border: 1px solid rgba(77,77,53,.15);
+      background: rgba(255,255,255,.7);
+      font-size: 17px;
+      font-weight: 650;
+    }
+    .float-chip {
+      position: absolute;
+      z-index: 10;
+      padding: 23px 30px;
+      border-radius: 999px;
+      font-size: 20px;
+      font-weight: 760;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+    }
+    #chip1 { left: 70px; top: 300px; }
+    #chip2 { right: 58px; top: 470px; }
+    #chip3 { left: 108px; top: 780px; }
+
+    /* Scene 4 */
+    #scene4 { justify-content: center; }
+    .verb-stack { position: relative; z-index: 9; }
+    .verb { overflow: hidden; padding: 0 0 24px; }
+    .verb span { display: block; font-size: 158px; line-height: .87; letter-spacing: -.07em; font-weight: 820; text-transform: uppercase; }
+    .verb:nth-child(2) span { margin-left: 120px; }
+    .verb:nth-child(3) span { margin-left: 28px; }
+    .glass-slice {
+      position: absolute;
+      left: -190px;
+      top: 780px;
+      width: 1500px;
+      height: 270px;
+      border-radius: 160px;
+      z-index: 4;
+      transform: rotate(-8deg);
+    }
+    .glass-slice .shine {
+      position: absolute;
+      width: 360px;
+      height: 100%;
+      left: -420px;
+      top: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.9), transparent);
+      filter: blur(18px);
+      transform: skewX(-22deg);
+    }
+
+    /* Scene 5 */
+    #scene5 { justify-content: space-between; padding-bottom: 90px; }
+    .launch-head { margin-top: 190px; position: relative; z-index: 9; }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      position: relative;
+      z-index: 8;
+      margin-bottom: 230px;
+    }
+    .feature {
+      min-height: 270px;
+      border-radius: 44px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature.wide { grid-column: 1 / -1; min-height: 220px; }
+    .feature-num {
+      font-size: 15px;
+      letter-spacing: .18em;
+      color: #767a70;
+      font-weight: 800;
+    }
+    .feature h3 {
+      position: absolute;
+      left: 30px;
+      bottom: 62px;
+      margin: 0;
+      font-size: 35px;
+      letter-spacing: -.04em;
+    }
+    .feature p {
+      position: absolute;
+      left: 30px;
+      bottom: 29px;
+      margin: 0;
+      color: #777b70;
+      font-size: 18px;
+    }
+    .wide h3 { font-size: 50px; bottom: 72px; }
+    .wide p { bottom: 36px; }
+
+    /* Scene 6 */
+    #scene6 {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px;
+    }
+    .final-orb {
+      position: absolute;
+      width: 760px;
+      height: 760px;
+      border-radius: 50%;
+      top: 520px;
+      left: 160px;
+      opacity: .8;
+    }
+    .final-content { position: relative; z-index: 9; }
+    .final-brand {
+      font-size: 112px;
+      line-height: 1;
+      font-weight: 820;
+      letter-spacing: .22em;
+      margin-left: .22em;
+    }
+    .final-tag {
+      margin-top: 30px;
+      font-size: 29px;
+      letter-spacing: -.02em;
+      color: #6e7267;
+    }
+    .final-pill {
+      display: inline-flex;
+      margin-top: 68px;
+      padding: 20px 30px;
+      border-radius: 999px;
+      font-size: 18px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 780;
+      color: #5b5f52;
+    }
+    .site {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 90px;
+      font-size: 18px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #6f7368;
+      z-index: 9;
+    }
+  </style>
+</head>
+<body>
+  <main
+    id="priveLaunch"
+    data-composition-id="priveLaunch"
+    data-start="0"
+    data-duration="12"
+    data-width="1080"
+    data-height="1920"
+    data-fps="30"
+  >
+    <div class="orb orb-a" id="orbA"></div>
+    <div class="orb orb-b" id="orbB"></div>
+    <div class="orb orb-c" id="orbC"></div>
+
+    <section class="scene active-base" id="scene1">
+      <div class="topbar">
+        <div class="brand">PRIVÉ</div>
+        <div class="index glass">01 / 06</div>
+      </div>
+      <div class="glass glass-lens" id="lens1"></div>
+      <div class="hero-stack">
+        <div class="kicker" id="s1Kicker">A new digital experience</div>
+        <div class="hero-line"><h1 class="mega" id="s1TitleA">MORE THAN</h1></div>
+        <div class="hero-line"><h1 class="mega" id="s1TitleB">GROOMING.</h1></div>
+        <div class="hero-sub">
+          <div>
+            <div class="mini-rule"></div>
+            <div class="kicker">Sulaymaniyah</div>
+          </div>
+          <p class="bodycopy" id="s1Copy">The Privé experience is becoming as considered digitally as it is in the lounge.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene2">
+      <div class="topbar">
+        <div class="brand">PRIVÉ</div>
+        <div class="index glass">02 / 06</div>
+      </div>
+      <div class="glass morph-glass" id="morphGlass"></div>
+      <div class="statement-wrap">
+        <div class="statement-row"><span class="display" id="s2A">IN THE</span></div>
+        <div class="statement-row"><span class="display" id="s2B">RIGHT</span></div>
+        <div class="statement-row"><span class="display" id="s2C">HANDS.</span></div>
+        <div class="statement-accent" id="s2Accent">Now, everywhere</div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene3">
+      <div class="topbar">
+        <div class="brand">PRIVÉ</div>
+        <div class="index glass">03 / 06</div>
+      </div>
+      <div class="product-title">
+        <div class="kicker" id="s3Kicker">Introducing</div>
+        <h2 class="display" id="s3Title">THE PRIVÉ<br/>EXPERIENCE.</h2>
+      </div>
+      <div class="product-stage">
+        <div class="glass float-chip" id="chip1">Book in seconds</div>
+        <div class="glass float-chip" id="chip2">Your master. Your time.</div>
+        <div class="glass float-chip" id="chip3">Designed around you</div>
+        <div class="phone" id="phone">
+          <div class="glass phone-shell"></div>
+          <div class="phone-screen">
+            <div class="island"></div>
+            <div class="app-top">
+              <div class="app-logo">PRIVÉ</div>
+              <div class="avatar"></div>
+            </div>
+            <div class="hello">Good evening.</div>
+            <div class="app-muted">Your next appointment, beautifully simple.</div>
+            <div class="glass appointment">
+              <div class="small">Upcoming appointment</div>
+              <h3>Signature haircut</h3>
+              <p>With your selected master</p>
+              <div class="time">7:30 PM</div>
+            </div>
+            <div class="service-label">Explore services</div>
+            <div class="service-row">
+              <div class="service-pill">Hair</div>
+              <div class="service-pill">Skin</div>
+              <div class="service-pill">Care</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene4">
+      <div class="topbar">
+        <div class="brand">PRIVÉ</div>
+        <div class="index glass">04 / 06</div>
+      </div>
+      <div class="glass glass-slice" id="glassSlice"><div class="shine" id="sliceShine"></div></div>
+      <div class="verb-stack">
+        <div class="verb"><span id="verb1">BOOK.</span></div>
+        <div class="verb"><span id="verb2">GROOM.</span></div>
+        <div class="verb"><span id="verb3">RETURN.</span></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene5">
+      <div class="topbar">
+        <div class="brand">PRIVÉ</div>
+        <div class="index glass">05 / 06</div>
+      </div>
+      <div class="launch-head">
+        <div class="kicker" id="s5Kicker">The next chapter</div>
+        <h2 class="display" id="s5Title">DIGITAL,<br/>DONE RIGHT.</h2>
+      </div>
+      <div class="launch-grid">
+        <article class="glass feature" id="feature1">
+          <div class="feature-num">01</div>
+          <h3>Website</h3>
+          <p>Live now</p>
+        </article>
+        <article class="glass feature" id="feature2">
+          <div class="feature-num">02</div>
+          <h3>Booking</h3>
+          <p>Built for Privé</p>
+        </article>
+        <article class="glass feature wide" id="feature3">
+          <div class="feature-num">03</div>
+          <h3>Mobile experience</h3>
+          <p>Coming soon</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="scene" id="scene6">
+      <div class="glass final-orb" id="finalOrb"></div>
+      <div class="final-content">
+        <div class="kicker" id="finalKicker">Privé Grooming Lounge</div>
+        <div class="final-brand" id="finalBrand">PRIVÉ</div>
+        <div class="final-tag" id="finalTag">in the right hands.</div>
+        <div class="glass final-pill" id="finalPill">The experience continues</div>
+      </div>
+      <div class="site" id="site">privelounge.co</div>
+    </section>
+
+    <div class="noise"></div>
+  </main>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power4.out" } });
+    const scenes = ["#scene1", "#scene2", "#scene3", "#scene4", "#scene5", "#scene6"];
+
+    gsap.set(scenes, { autoAlpha: 0 });
+    gsap.set("#scene1", { autoAlpha: 1 });
+
+    gsap.set(["#s1TitleA", "#s1TitleB"], { yPercent: 118 });
+    gsap.set(["#s1Kicker", "#s1Copy"], { opacity: 0, y: 28 });
+    gsap.set("#lens1", { opacity: 0, scale: .58, x: 180, rotate: -22 });
+
+    gsap.set(["#s2A", "#s2B", "#s2C"], { yPercent: 118 });
+    gsap.set("#s2Accent", { opacity: 0, x: -40 });
+    gsap.set("#morphGlass", { opacity: 0, scale: .72, rotate: -8 });
+
+    gsap.set(["#s3Kicker", "#s3Title"], { opacity: 0, y: 45 });
+    gsap.set("#phone", { opacity: 0, y: 320, rotateX: 11, rotateY: -17, rotateZ: -5, scale: .84 });
+    gsap.set(["#chip1", "#chip2", "#chip3"], { opacity: 0, scale: .72 });
+
+    gsap.set(["#verb1", "#verb2", "#verb3"], { yPercent: 118, rotate: 2 });
+    gsap.set("#glassSlice", { opacity: 0, x: -260, rotate: -14 });
+    gsap.set("#sliceShine", { x: 0 });
+
+    gsap.set(["#s5Kicker", "#s5Title"], { opacity: 0, y: 44 });
+    gsap.set(["#feature1", "#feature2", "#feature3"], { opacity: 0, y: 80, scale: .92 });
+
+    gsap.set(["#finalKicker", "#finalBrand", "#finalTag", "#finalPill", "#site"], { opacity: 0, y: 35 });
+    gsap.set("#finalOrb", { opacity: 0, scale: .64 });
+
+    tl.to("#s1Kicker", { opacity: 1, y: 0, duration: .38 }, .08)
+      .to("#s1TitleA", { yPercent: 0, duration: .58 }, .16)
+      .to("#s1TitleB", { yPercent: 0, duration: .62 }, .26)
+      .to("#s1Copy", { opacity: 1, y: 0, duration: .46 }, .5)
+      .to("#lens1", { opacity: .95, scale: 1, x: 0, rotate: -10, duration: .82, ease: "expo.out" }, .18)
+      .to("#lens1", { x: -58, y: 90, rotate: 10, duration: 1.0, ease: "sine.inOut" }, .9)
+      .to("#scene1", { autoAlpha: 0, scale: 1.035, filter: "blur(8px)", duration: .24, ease: "power2.in" }, 1.68)
+
+      .set("#scene2", { autoAlpha: 1 }, 1.76)
+      .to("#morphGlass", { opacity: .92, scale: 1, rotate: 5, duration: .72, ease: "expo.out" }, 1.76)
+      .to("#s2A", { yPercent: 0, duration: .45 }, 1.84)
+      .to("#s2B", { yPercent: 0, duration: .48 }, 1.94)
+      .to("#s2C", { yPercent: 0, duration: .52 }, 2.04)
+      .to("#s2Accent", { opacity: 1, x: 0, duration: .42 }, 2.3)
+      .to("#morphGlass", { borderRadius: "58% 42% 62% 38% / 42% 58% 42% 58%", rotate: -4, y: 60, duration: .9, ease: "sine.inOut" }, 2.42)
+      .to("#scene2", { autoAlpha: 0, y: -35, filter: "blur(8px)", duration: .24, ease: "power2.in" }, 3.18)
+
+      .set("#scene3", { autoAlpha: 1 }, 3.24)
+      .to("#s3Kicker", { opacity: 1, y: 0, duration: .34 }, 3.27)
+      .to("#s3Title", { opacity: 1, y: 0, duration: .52 }, 3.35)
+      .to("#phone", { opacity: 1, y: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, duration: .9, ease: "expo.out" }, 3.55)
+      .to("#chip1", { opacity: 1, scale: 1, x: -10, duration: .45 }, 4.05)
+      .to("#chip2", { opacity: 1, scale: 1, x: 14, duration: .45 }, 4.18)
+      .to("#chip3", { opacity: 1, scale: 1, x: -12, duration: .45 }, 4.31)
+      .to("#phone", { y: -38, rotateY: 3, duration: .72, ease: "sine.inOut" }, 4.65)
+      .to(["#chip1", "#chip3"], { y: -28, duration: .72, ease: "sine.inOut" }, 4.62)
+      .to("#chip2", { y: 25, duration: .72, ease: "sine.inOut" }, 4.62)
+      .to("#scene3", { autoAlpha: 0, scale: .96, filter: "blur(10px)", duration: .28, ease: "power2.in" }, 5.72)
+
+      .set("#scene4", { autoAlpha: 1 }, 5.82)
+      .to("#glassSlice", { opacity: .9, x: 0, rotate: -8, duration: .72, ease: "expo.out" }, 5.82)
+      .to("#verb1", { yPercent: 0, rotate: 0, duration: .48 }, 5.9)
+      .to("#verb2", { yPercent: 0, rotate: 0, duration: .48 }, 6.04)
+      .to("#verb3", { yPercent: 0, rotate: 0, duration: .5 }, 6.18)
+      .to("#sliceShine", { x: 1900, duration: .8, ease: "power2.inOut" }, 6.28)
+      .to("#glassSlice", { rotate: -2, y: -70, duration: .68, ease: "sine.inOut" }, 6.65)
+      .to("#scene4", { autoAlpha: 0, x: -50, filter: "blur(8px)", duration: .24, ease: "power2.in" }, 7.34)
+
+      .set("#scene5", { autoAlpha: 1 }, 7.42)
+      .to("#s5Kicker", { opacity: 1, y: 0, duration: .32 }, 7.46)
+      .to("#s5Title", { opacity: 1, y: 0, duration: .5 }, 7.53)
+      .to("#feature1", { opacity: 1, y: 0, scale: 1, duration: .5 }, 7.85)
+      .to("#feature2", { opacity: 1, y: 0, scale: 1, duration: .5 }, 7.96)
+      .to("#feature3", { opacity: 1, y: 0, scale: 1, duration: .52 }, 8.08)
+      .to("#feature1", { y: -18, rotate: -.8, duration: .6, ease: "sine.inOut" }, 8.6)
+      .to("#feature2", { y: 12, rotate: .8, duration: .6, ease: "sine.inOut" }, 8.6)
+      .to("#feature3", { y: -8, duration: .6, ease: "sine.inOut" }, 8.6)
+      .to("#scene5", { autoAlpha: 0, scale: 1.03, filter: "blur(8px)", duration: .26, ease: "power2.in" }, 9.55)
+
+      .set("#scene6", { autoAlpha: 1 }, 9.64)
+      .to("#finalOrb", { opacity: .9, scale: 1, duration: .78, ease: "expo.out" }, 9.64)
+      .to("#finalKicker", { opacity: 1, y: 0, duration: .34 }, 9.78)
+      .to("#finalBrand", { opacity: 1, y: 0, duration: .55, letterSpacing: ".14em", ease: "expo.out" }, 9.88)
+      .to("#finalTag", { opacity: 1, y: 0, duration: .4 }, 10.18)
+      .to("#finalPill", { opacity: 1, y: 0, duration: .4 }, 10.42)
+      .to("#site", { opacity: 1, y: 0, duration: .38 }, 10.62)
+      .to("#finalOrb", { scale: 1.06, rotate: 8, duration: 1.0, ease: "sine.inOut" }, 10.65);
+
+    tl.to("#orbA", { x: 120, y: 210, scale: 1.12, duration: 12, ease: "none" }, 0)
+      .to("#orbB", { x: -150, y: -170, scale: 1.18, duration: 12, ease: "none" }, 0)
+      .to("#orbC", { x: -100, y: -120, scale: 1.22, duration: 12, ease: "none" }, 0);
+
+    window.__timelines.priveLaunch = tl;
+  </script>
+</body>
+</html>
