@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1080, initial-scale=1" />
+  <title>LogicBloom × Privé — Product Launch</title>
+  <link rel="stylesheet" href="./styles/tokens.css" />
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/glass.css" />
+  <link rel="stylesheet" href="./styles/scenes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+</head>
+<body>
+  <main
+    id="root"
+    data-composition-id="logicbloom-prive-launch"
+    data-start="0"
+    data-duration="47.432"
+    data-width="1080"
+    data-height="1920"
+    data-fps="30"
+  >
+    <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+      <filter id="liquid-distort" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.010 0.016" numOctaves="2" seed="29" result="noise"/>
+        <feGaussianBlur in="noise" stdDeviation="2.2" result="softNoise"/>
+        <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
+
+    <div id="ambient-a" class="ambient"></div>
+    <div id="ambient-b" class="ambient"></div>
+    <div id="ambient-c" class="ambient"></div>
+
+    <section id="scene01" class="clip scene" data-start="0" data-duration="2.704" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <div class="eyebrow">LogicBloom presents</div>
+          <div class="scene-index">01</div>
+        </div>
+
+        <div id="cold-lens" class="glass glass-lens blue-glass liquid-filter"></div>
+        <div id="cold-mark-wrap" class="glass">
+          <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+        </div>
+
+        <div id="cold-copy">
+          <div class="mask"><h1 id="cold-title-a" class="display-xl">A GREAT</h1></div>
+          <div class="mask"><h1 id="cold-title-b" class="display-xl">EXPERIENCE.</h1></div>
+        </div>
+
+        <div id="cold-bottom">
+          <div>
+            <div id="cold-rule" class="rule"></div>
+            <div class="mini" style="margin-top:14px">Beyond the door</div>
+          </div>
+          <p id="cold-body" class="body">A digital experience should carry the same care as the physical one.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene02" class="clip scene" data-start="2.704" data-duration="5.583" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <img class="lb-logo small" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div class="scene-index">02</div>
+        </div>
+
+        <div id="identity-stage">
+          <div id="identity-panel" class="navy-panel">
+            <div class="eyebrow" style="color:#9cb8d5">A digital experience for</div>
+            <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+          </div>
+
+          <div id="identity-mark" class="glass glass-card blue-glass">
+            <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+          </div>
+
+          <div id="identity-caption">
+            <div class="eyebrow">Physical → digital</div>
+            <p class="body-xl" style="margin-top:22px">Built around the same care, identity, and attention that define the lounge.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene03" class="clip scene" data-start="8.287" data-duration="1.823" data-track-index="1">
+      <div class="scene-inner">
+        <div id="right-hands-card" class="navy-panel">
+          <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+          <div id="right-hands-copy">in the right hands.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene04" class="clip scene" data-start="10.110" data-duration="2.411" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <img class="lb-logo small" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div class="scene-index">04</div>
+        </div>
+
+        <div id="presence-copy">
+          <div class="eyebrow">Digital presence</div>
+          <div class="mask"><h2 id="presence-title" class="display-lg">PRIVÉ,<br/>ONLINE.</h2></div>
+        </div>
+
+        <div id="presence-browser" class="browser-shell">
+          <div class="browser-chrome">
+            <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+            <div class="browser-address">privelounge.co</div>
+          </div>
+          <div class="browser-viewport">
+            <img class="website-shot" src="../assets/website.png" alt="Real Privé website" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene05" class="clip scene" data-start="12.521" data-duration="2.410" data-track-index="1">
+      <div id="website-full" class="browser-shell">
+        <div class="browser-chrome">
+          <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+          <div class="browser-address">privelounge.co</div>
+        </div>
+        <div class="browser-viewport">
+          <img id="website-shot-full" class="website-shot" src="../assets/website.png" alt="Real Privé website" />
+        </div>
+      </div>
+
+      <div id="website-float" class="glass glass-card">
+        <div class="eyebrow">Built around</div>
+        <div class="display-md" style="font-size:54px;margin-top:24px">THE PRIVÉ<br/>IDENTITY.</div>
+      </div>
+
+      <div id="website-caption" class="glass glass-pill">Real website · privelounge.co</div>
+    </section>
+
+    <section id="scene06" class="clip scene" data-start="14.931" data-duration="2.704" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <img class="lb-logo small" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div class="scene-index">06</div>
+        </div>
+
+        <div id="invite-stage">
+          <div id="invite-ghost-a"></div>
+          <div id="invite-ghost-b"></div>
+          <div id="invite-card" class="invite-card">
+            <div class="invite-mark">
+              <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+            </div>
+            <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+            <div>
+              <div class="eyebrow" style="color:#9cb8d5">Opening experience</div>
+              <div class="invite-meta" style="margin-top:24px">A personalized digital invitation<br/>built for Privé's opening.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene07" class="clip scene" data-start="17.635" data-duration="2.704" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <div class="eyebrow">Behind the experience</div>
+          <div class="scene-index">07</div>
+        </div>
+
+        <div class="mask" style="margin-top:105px"><h2 id="infra-title" class="display-lg">CONNECTED<br/>BY DESIGN.</h2></div>
+
+        <div id="infra-stage">
+          <div id="infra-line-a" class="infra-line"></div>
+          <div id="infra-line-b" class="infra-line"></div>
+          <div id="infra-line-c" class="infra-line"></div>
+          <div id="infra-line-d" class="infra-line"></div>
+
+          <div id="infra-core">
+            <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+          </div>
+
+          <div id="infra-web" class="infra-node glass glass-card">
+            <strong>Web</strong><span>Customer-facing presence</span>
+          </div>
+          <div id="infra-system" class="infra-node glass glass-card">
+            <strong>Systems</strong><span>Operational foundation</span>
+          </div>
+          <div id="infra-devices" class="infra-node glass glass-card">
+            <strong>Devices</strong><span>Business infrastructure</span>
+          </div>
+          <div id="infra-ops" class="infra-node glass glass-card">
+            <strong>Operations</strong><span>Connected workflows</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene08" class="clip scene" data-start="20.339" data-duration="1.927" data-track-index="1">
+      <div class="scene-inner">
+        <div id="deeper-lens" class="glass glass-lens liquid-filter"></div>
+        <div id="deeper-copy">
+          <div class="eyebrow">Then we built</div>
+          <div class="mask"><h2 id="deeper-title" class="display-xl">SOMETHING<br/>DEEPER.</h2></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene09" class="clip scene" data-start="22.266" data-duration="3.434" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <img class="lb-logo small" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div class="scene-index">09</div>
+        </div>
+
+        <div id="management-title">
+          <div class="eyebrow">Privé management</div>
+          <div class="mask"><h2 id="management-heading" class="display-lg">BUILT AROUND<br/>THE BUSINESS.</h2></div>
+        </div>
+
+        <div id="management-architecture" class="system-architecture">
+          <div class="system-core">
+            <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+          </div>
+
+          <div id="mod-ops" class="module glass glass-card"><div class="num">01</div><strong>Operations</strong><small>Daily business workflows</small></div>
+          <div id="mod-services" class="module glass glass-card"><div class="num">02</div><strong>Services</strong><small>Built around what Privé offers</small></div>
+          <div id="mod-customers" class="module glass glass-card"><div class="num">03</div><strong>Customers</strong><small>Connected customer context</small></div>
+          <div id="mod-team" class="module glass glass-card"><div class="num">04</div><strong>Team</strong><small>Masters and staff</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene10" class="clip scene" data-start="25.700" data-duration="3.376" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <div class="eyebrow">One system</div>
+          <div class="scene-index">10</div>
+        </div>
+
+        <div id="connection-title" class="mask"><h2 id="connection-heading" class="display-lg">EVERYTHING<br/>CONNECTED.</h2></div>
+
+        <div class="connection-grid">
+          <div id="connect-ops" class="connection-card glass"><div class="eyebrow">01</div><strong>Operations</strong></div>
+          <div id="connect-services" class="connection-card glass"><div class="eyebrow">02</div><strong>Services</strong></div>
+          <div id="connect-customers" class="connection-card glass"><div class="eyebrow">03</div><strong>Customers</strong></div>
+          <div id="connect-team" class="connection-card glass"><div class="eyebrow">04</div><strong>Team</strong></div>
+          <div id="one-experience" class="connection-card"><div class="eyebrow" style="color:#9cb8d5">Together</div><strong>ONE EXPERIENCE.</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene11" class="clip scene" data-start="29.076" data-duration="1.531" data-track-index="1">
+      <div class="scene-inner">
+        <div>
+          <div id="still-line"></div>
+          <div class="mask"><h2 id="still-title" class="display-lg">WE'RE STILL<br/>BUILDING.</h2></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene12" class="clip scene" data-start="30.607" data-duration="2.893" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <div class="eyebrow">Coming next</div>
+          <div class="scene-index">12</div>
+        </div>
+
+        <div class="mask" style="margin-top:102px"><h2 id="mobile-reveal-title" class="display-lg">A NEW MOBILE<br/>EXPERIENCE.</h2></div>
+
+        <div class="phone-stage">
+          <div id="mobile-phone" class="phone">
+            <div class="phone-screen">
+              <div class="phone-island"></div>
+              <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+              <div class="coming-copy">
+                <strong>The experience<br/>continues.</strong>
+                <span>Privé mobile · coming soon</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene13" class="clip scene" data-start="33.500" data-duration="5.091" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <img class="lb-logo small" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div class="scene-index">13</div>
+        </div>
+
+        <div class="mask" style="margin-top:95px"><h2 id="mobile-features-title" class="display-lg">DESIGNED AROUND<br/>THE CUSTOMER.</h2></div>
+
+        <div class="phone-stage">
+          <div id="mobile-chip-a" class="phone-chip glass glass-pill">Discover services</div>
+          <div id="mobile-chip-b" class="phone-chip glass glass-pill">Choose your master</div>
+          <div id="mobile-chip-c" class="phone-chip glass glass-pill">Book your time</div>
+
+          <div id="feature-phone" class="phone">
+            <div class="phone-screen">
+              <div class="phone-island"></div>
+              <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+              <div class="feature-list">
+                <div id="feature-services" class="feature-row"><span>Services</span><span>→</span></div>
+                <div id="feature-master" class="feature-row"><span>Your master</span><span>→</span></div>
+                <div id="feature-time" class="feature-row"><span>Book a time</span><span>→</span></div>
+                <div id="feature-connected" class="feature-row"><span>Stay connected</span><span>✓</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene14" class="clip scene" data-start="38.591" data-duration="2.997" data-track-index="1">
+      <div class="scene-inner">
+        <div class="topline">
+          <div class="eyebrow">From first interaction to every visit</div>
+          <div class="scene-index">14</div>
+        </div>
+
+        <div class="mask" style="margin-top:88px"><h2 id="ecosystem-title" class="display-lg">ONE CONNECTED<br/>EXPERIENCE.</h2></div>
+
+        <div id="ecosystem-stage">
+          <div id="eco-web" class="eco-surface">
+            <img src="../assets/website.png" alt="Real Privé website" />
+          </div>
+          <div id="eco-invite" class="eco-surface">
+            <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+          </div>
+          <div id="eco-system" class="eco-surface glass">
+            <div class="eyebrow">Management</div>
+            <strong>Built around<br/>Privé.</strong>
+          </div>
+          <div id="eco-phone" class="eco-surface">
+            <img class="prive-mark" src="../assets/É_Mark.png" alt="Privé mark" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene15" class="clip scene" data-start="41.588" data-duration="1.824" data-track-index="1">
+      <div class="scene-inner">
+        <div id="creator-lockup">
+          <div class="eyebrow">Designed and built by</div>
+          <img id="creator-logo" class="lb-logo large" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+          <div id="client-chip">
+            <img class="prive-logo" src="../assets/prive.png" alt="Privé Grooming Lounge" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene16" class="clip scene" data-start="43.412" data-duration="4.020" data-track-index="1">
+      <div class="scene-inner">
+        <img id="final-logo" class="lb-logo large" src="../assets/Navy-transparent.svg" alt="LogicBloom" />
+        <div id="final-copy">
+          <div class="mask"><h2 id="final-title-a" class="display-lg">DIGITAL EXPERIENCES,</h2></div>
+          <div class="mask"><h2 id="final-title-b" class="display-lg">BUILT AROUND THE BUSINESS.</h2></div>
+          <div id="final-accent"></div>
+          <div id="final-sub">LogicBloom × Privé</div>
+        </div>
+      </div>
+    </section>
+
+    <audio
+      id="narration"
+      src="../audio/narration.wav"
+      data-start="0"
+      data-duration="45.632"
+      data-track-index="10"
+      data-volume="1"
+      preload="auto"
+    ></audio>
+
+    <div id="transition-layer">
+      <div id="transition-flash"></div>
+      <div id="transition-sweep"></div>
+    </div>
+
+    <div class="grain"></div>
+    <div class="frame-vignette"></div>
+  </main>
+
+  <script src="./scenes/timeline.js"></script>
+</body>
+</html>
