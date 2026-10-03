@@ -1,25 +1,39 @@
-# LogicBloom Motion Demo
+# LogicBloom Motion System
 
-A code-driven 9:16 SaaS/product-launch reel built with React and Remotion.
+A code-driven motion-design playground built with React + Remotion.
 
-The goal is to demonstrate the style of motion graphics often seen in polished product-launch reels: kinetic type, perspective UI, animated data visualization, glow, depth, masking, blur, layered transitions, and a reusable brand system — without After Effects.
+The primary composition is now a **white-theme LogicBloom case study for Privé Grooming Lounge**, based on the supplied LogicBloom identity, white silk reference, and Privé homepage reference.
 
-## Composition
+## Primary composition
 
-- **ID:** `LogicBloomLaunch`
+- **ID:** `LogicBloomPriveCaseStudy`
 - **Format:** 1080 × 1920
 - **Frame rate:** 30 FPS
 - **Duration:** 450 frames / 15 seconds
 - **Output:** H.264 MP4
 
+### Art direction
+
+The film uses a restrained LogicBloom motion language:
+
+- near-white editorial canvas
+- LogicBloom navy: `#0E2247`
+- procedurally animated pale-blue silk/fabric environment
+- precise logo/wordmark reveal
+- minimal typography and generous whitespace
+- Privé's dark/ivory/beige visual language introduced only inside the case study
+- slow camera movement, masks, depth and fabric wipes instead of generic slide transitions
+- no exaggerated bounce or neon SaaS effects
+
 ### Storyboard
 
-1. **Brand reveal** — SVG mark + kinetic headline
-2. **Product reveal** — perspective SaaS dashboard with animated metrics
-3. **Feature system** — three staggered feature cards
-4. **Outro** — LogicBloom CTA / brand lockup
+1. **LogicBloom identity** — radial symbol construction and lockup
+2. **Selected Work / 001** — Privé project introduction
+3. **Web experience reveal** — Privé homepage emerges from the animated white environment
+4. **Deliverables** — Website, Digital Invitation, IT Infrastructure, Management System
+5. **Outro** — LogicBloom / “From idea to production.”
 
-The demo dashboard uses **Privé Management** as sample product copy. It is intentionally drawn in React rather than captured from a real app so the repository is self-contained.
+The Privé web frame is recreated in React from the supplied homepage reference so the demo remains deterministic and self-contained during rendering.
 
 ## Run locally
 
@@ -28,53 +42,33 @@ npm install
 npm run studio
 ```
 
-Open the Remotion Studio and select **LogicBloomLaunch**.
+Select **LogicBloomPriveCaseStudy** in Remotion Studio.
 
 ## Render
-
-Full vertical video:
 
 ```bash
 npm run render
 ```
 
-Faster half-resolution preview:
+Output:
+
+```text
+out/logicbloom-prive-case-study.mp4
+```
+
+Fast half-resolution preview:
 
 ```bash
 npm run render:preview
 ```
 
-Outputs are written to `out/`.
+## Files
 
-## Where to customize
+- `src/PriveCaseStudy.tsx` — new white-theme case study and motion language
+- `src/LaunchFilm.tsx` — original dark prototype, kept as a legacy comparison
+- `src/Root.tsx` — composition registration
+- `src/components.tsx` — original prototype components
 
-- `src/LaunchFilm.tsx` — scene order, copy, timing, storyboard
-- `src/components.tsx` — motion components, product UI, palette, logo mark
-- `src/Root.tsx` — resolution, FPS, total duration
+## Next production pass
 
-### Replace the temporary mark
-
-`LogoMark` is a small inline SVG created only for this demo. Replace it with the real LogicBloom SVG/PNG once available.
-
-### Turn this into a reusable motion kit
-
-A production version can split the current system into reusable compositions such as:
-
-- `LogoReveal`
-- `ProductHero`
-- `BrowserMockup`
-- `PhoneMockup`
-- `FeatureCard`
-- `KineticHeadline`
-- `MetricReveal`
-- `CTAOutro`
-
-Then each client launch reel can be driven by props instead of rewriting animation code.
-
-## GitHub render
-
-The included GitHub Actions workflow type-checks the project and renders a preview MP4. Download the `logicbloom-motion-preview` artifact from the workflow run.
-
-## Notes
-
-This first pass deliberately uses only React + Remotion and CSS/SVG effects. Three.js, shaders, real screenshots, sound design, and client-specific assets can be layered in later once the motion direction is approved.
+The current implementation establishes the motion direction. A production pass can replace the React recreation of the website with captured real product frames, add the exact vector LogicBloom artwork, add sound design, and create 1080×1350 / 1920×1080 variants from the same scene system.
