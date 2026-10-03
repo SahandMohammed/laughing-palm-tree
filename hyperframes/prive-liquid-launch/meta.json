@@ -1,0 +1,15 @@
+{
+  "name": "prive-liquid-glass-launch",
+  "title": "Privé — Liquid Glass Product Launch",
+  "compositionId": "priveLaunch",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 12,
+  "style": [
+    "white",
+    "liquid-glass",
+    "bold-editorial-type",
+    "product-launch"
+  ]
+}
