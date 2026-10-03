@@ -2,6 +2,14 @@ name: Render motion preview
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "package.json"
+      - "tsconfig.json"
+      - ".github/workflows/render.yml"
   push:
     branches:
       - main
@@ -38,7 +46,7 @@ jobs:
       - name: Upload preview
         uses: actions/upload-artifact@v4
         with:
-          name: logicbloom-motion-preview
-          path: out/logicbloom-preview.mp4
+          name: logicbloom-prive-preview
+          path: out/logicbloom-prive-preview.mp4
           if-no-files-found: error
           retention-days: 14
